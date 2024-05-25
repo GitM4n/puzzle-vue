@@ -3,6 +3,7 @@ import { ref } from 'vue';
 const currTile = ref<HTMLImageElement | null>(null);
 const targetTile = ref<HTMLImageElement | null>(null);
 
+
 export const useDragEvents = () => {
     const dragStart = (event: DragEvent) => {
         currTile.value = event.target as HTMLImageElement;
@@ -22,14 +23,14 @@ export const useDragEvents = () => {
        
     };
     
-    const dragEnd = () => {
+    const dragEnd = ():number => {
 
-        if (!currTile.value || !targetTile.value) return;
+        if (!currTile.value || !targetTile.value) return 0;
 
         const emptyImgId = currTile.value?.src.slice(-5,-4)
 
     
-        if(emptyImgId === '9') return
+        if(emptyImgId === '9') return 0
 
 
       
@@ -52,13 +53,14 @@ export const useDragEvents = () => {
 
         const isMoveValid = (moveLeft || moveRight || moveUp || moveDown)&&isEmpty
 
-        if(!isMoveValid) return
+        if(!isMoveValid) return 0
         
         const currSrc = currTile.value.src;
         const targetSrc = targetTile.value.src;
 
         currTile.value.src = targetSrc;
         targetTile.value.src = currSrc;
+        return 1
     };
 
     return {

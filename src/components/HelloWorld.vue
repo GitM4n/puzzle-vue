@@ -66,6 +66,7 @@ const newGame = () => {
 
 
 
+
 onMounted(()=>{
   fillImgOrder()
 
@@ -88,7 +89,7 @@ onMounted(()=>{
         @dragover="dragEvents.dragOver"
         @dragenter="dragEvents.dragEnter"
         @drop="dragEvents.dragDrop"
-        @dragend="dragEvents.dragEnd(); turns++"
+        @dragend="turns = turns + dragEvents.dragEnd()"
         
       
       >
