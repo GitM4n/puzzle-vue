@@ -27,10 +27,10 @@ export const useDragEvents = () => {
 
         if (!currTile.value || !targetTile.value) return 0;
 
-        const emptyImgId = currTile.value?.src.slice(-5,-4)
-
+        const emptysrc= currTile.value?.src
+        const pattern = /\/9.*\.png$/
     
-        if(emptyImgId === '9') return 0
+        if(pattern.test(emptysrc)) return 0
 
 
       
@@ -47,7 +47,7 @@ export const useDragEvents = () => {
         const moveRight = r1 == r2 && c2 == c1+1
         const moveUp = c1 == c2 && r2 == r1-1
         const moveDown = c1 == c2 && r2 == r1+1
-        const isEmpty = targetTile.value.src.includes('9.png')
+        const isEmpty = pattern.test(targetTile.value.src)
 
 
 
