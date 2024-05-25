@@ -5,7 +5,8 @@ import { useDragEvents } from '../composables/useDragEvents';
 type ImgOrder = {
   order:number,
   id:string,
-  src:string
+  src:string,
+
 }
 
 
@@ -39,11 +40,15 @@ const fillImgOrder = () => {
         imgOrder.value.push({
           order:q,
           id:i.toString() + '-' + j.toString(),
-          src:new URL(`../assets/${pictureName.value}/${q}.png`, import.meta.url).href
+          src:new URL(`../assets/${pictureName.value}/${q}.png`, import.meta.url).href,
         })
       }
       
     }
+
+
+
+   
 }
 
 
@@ -64,12 +69,17 @@ const newGame = () => {
 }
 
 
+const dragEnd = () =>{
+  turns.value += dragEvents.dragEnd()
+
+
+}
+
 
 
 
 onMounted(()=>{
   fillImgOrder()
-
 })
 
 </script>
@@ -89,7 +99,7 @@ onMounted(()=>{
         @dragover="dragEvents.dragOver"
         @dragenter="dragEvents.dragEnter"
         @drop="dragEvents.dragDrop"
-        @dragend="turns = turns + dragEvents.dragEnd()"
+        @dragend="dragEnd"
         
       
       >
@@ -111,4 +121,10 @@ onMounted(()=>{
   display: grid;
   background-color: rgba(95, 255, 47, 0.2);
 }
+
+img{
+  width: 200px;
+  height: 200px;
+}
+
 </style>
