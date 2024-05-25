@@ -1,7 +1,0 @@
-[[plugins]]
-package = "@netlify/plugin-inline-source"
-  [plugins.inputs]
-  extensions = ["html", "css"]
-
-[build]
-  ignore = "assets/**"
