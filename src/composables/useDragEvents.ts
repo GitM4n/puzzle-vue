@@ -23,8 +23,7 @@ export const useDragEvents = () => {
        
     };
     
-    const dragEnd = ():number => {
-
+    const dragEnd = (event:DragEvent):number => {
         if (!currTile.value || !targetTile.value) return 0;
 
         const emptysrc= currTile.value?.src
@@ -63,6 +62,26 @@ export const useDragEvents = () => {
         return 1
     };
 
+    const touchStart = (event: TouchEvent) => {
+        currTile.value = event.target as HTMLImageElement;
+      };
+      
+      const touchMove = (event: TouchEvent) => {
+        event.preventDefault();
+      };
+      
+      const touchEnd = (event: TouchEvent):number => {
+        targetTile.value = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY) as HTMLImageElement;
+        return dragEnd(event as unknown as DragEvent);
+      };
+
+
+
+
+
+
+
+
     return {
         dragStart,
         dragOver,
@@ -70,6 +89,9 @@ export const useDragEvents = () => {
         dragEnter,
         dragEnd,
         currTile,
-        targetTile
+        targetTile,
+        touchEnd,
+        touchMove,
+        touchStart
     };
 };

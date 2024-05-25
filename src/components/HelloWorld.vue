@@ -32,21 +32,19 @@ const imgOrder = ref<ImgOrder[]>([]);
 
 
 const fillImgOrder = () => {
-    let q = 0;
+    let order = 0;
     imgOrder.value = []
     for (let i = 0; i < properties.value.rows; i++) {
       for (let j = 0; j < properties.value.cols; j++) {
-        q++
+        order++
         imgOrder.value.push({
-          order:q,
+          order,
           id:i.toString() + '-' + j.toString(),
-          src:new URL(`../assets/${pictureName.value}/${q}.png`, import.meta.url).href,
+          src:new URL(`../assets/${pictureName.value}/${order}.png`, import.meta.url).href,
         })
       }
       
     }
-
-
 
    
 }
@@ -56,7 +54,8 @@ const shuffleImg = () => {
  
   for (let i = imgOrder.value.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [imgOrder.value[i].order, imgOrder.value[j].order] = [imgOrder.value[j].order, imgOrder.value[i].order];
+    [imgOrder.value[i].src, imgOrder.value[j].src] = [imgOrder.value[j].src, imgOrder.value[i].src];
+   
   }
 };
 
@@ -69,17 +68,9 @@ const newGame = () => {
 }
 
 
-const dragEnd = () =>{
-  turns.value += dragEvents.dragEnd()
-
-
-}
-
-
-
-
 onMounted(()=>{
   fillImgOrder()
+
 })
 
 </script>
@@ -99,7 +90,10 @@ onMounted(()=>{
         @dragover="dragEvents.dragOver"
         @dragenter="dragEvents.dragEnter"
         @drop="dragEvents.dragDrop"
-        @dragend="dragEnd"
+        @dragend="turns += dragEvents.dragEnd($event)"
+        @touchstart="dragEvents.touchStart"
+        @touchend="turns += dragEvents.touchEnd($event)"
+        @touchmove="dragEvents.touchMove"
         
       
       >
