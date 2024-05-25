@@ -24,6 +24,7 @@ export const useDragEvents = () => {
     };
     
     const dragEnd = (event:DragEvent):number => {
+        event.preventDefault()
         if (!currTile.value || !targetTile.value) return 0;
 
         const emptysrc= currTile.value?.src
