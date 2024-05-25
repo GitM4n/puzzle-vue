@@ -5,6 +5,7 @@ import { useDragEvents } from '../composables/useDragEvents';
 type ImgOrder = {
   order:number,
   id:string,
+  src:string
 }
 
 
@@ -37,7 +38,8 @@ const fillImgOrder = () => {
         q++
         imgOrder.value.push({
           order:q,
-          id:i.toString() + '-' + j.toString()
+          id:i.toString() + '-' + j.toString(),
+          src:new URL(`../assets/${pictureName.value}/${q}.png`, import.meta.url).href
         })
       }
       
@@ -66,6 +68,7 @@ const newGame = () => {
 
 onMounted(()=>{
   fillImgOrder()
+
 })
 
 </script>
@@ -77,7 +80,7 @@ onMounted(()=>{
       <img
         v-for="img,idx in imgOrder"
         :key="idx"
-        :src="`/src/assets/${pictureName}/${img.order}.png`"
+        :src="img.src"
         :alt="img.id"
         :id="img.id"
         draggable="true"
