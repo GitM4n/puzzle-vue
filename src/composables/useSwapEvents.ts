@@ -5,6 +5,7 @@ const targetTile = ref<HTMLImageElement | null>(null);
 
 
 export const useDragEvents = () => {
+
     const dragStart = (event: DragEvent) => {
         currTile.value = event.target as HTMLImageElement;
   
@@ -72,11 +73,6 @@ export const useDragEvents = () => {
 
 
 
-
-
-
-
-
     return {
         dragStart,
         dragOver,
@@ -87,6 +83,60 @@ export const useDragEvents = () => {
         targetTile,
         touchEnd,
         touchMove,
-        touchStart
+        touchStart,
     };
 };
+
+
+
+
+
+
+export const useClickEvent = () => {
+    
+const checkAdjacentElements = (id: string) => {
+    let turn = 0;
+
+    const [row, col] = id.split('-').map(Number);
+    const adjacentIds = [
+      `${row - 1}-${col}`, // Top
+      `${row + 1}-${col}`, // Bottom
+      `${row}-${col - 1}`, // Left
+      `${row}-${col + 1}`  // Right
+    ];
+  
+    adjacentIds.forEach(adjId => {
+      const adjacentElement = document.getElementById(adjId) as HTMLImageElement;
+      if (adjacentElement && /\/9.*\.png$/.test(adjacentElement.src)) {
+         swapImages(id, adjacentElement.id);
+         turn++
+      }
+      
+    });
+
+    return turn
+  };
+  
+  const swapImages = (id1: string, id2: string) => {
+    const img1 = document.getElementById(id1) as HTMLImageElement;
+    const img2 = document.getElementById(id2) as HTMLImageElement;
+    
+    if (img1 && img2) {
+      const tempSrc = img1.src;
+      img1.src = img2.src;
+      img2.src = tempSrc;
+      
+     
+    }
+
+ 
+  }
+
+ 
+
+  return {
+    checkAdjacentElements,
+    swapImages,
+   
+  }
+}

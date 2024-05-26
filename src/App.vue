@@ -1,8 +1,18 @@
 <script setup lang="ts">
+import {ref, watch} from 'vue'
 import BoardComponent from './components/BoardComponent.vue'
+import SwitchUI from './components/SwitchUI.vue';
+
+const isDrag = ref<boolean>(true)
+
+watch(isDrag, ()=>{
+  console.log(isDrag.value)
+})
+
 </script>
 
 <template>
+<div class="wrapper">
   <p class="powered">Powered by</p>
   <div>
     <a href="https://vitejs.dev" target="_blank">
@@ -13,12 +23,27 @@ import BoardComponent from './components/BoardComponent.vue'
     </a>
   </div>
   <h1 class="title">Puzzle Game</h1>
-  <BoardComponent />
+
+  <div class="drag-mode">
+    <p class="drag-mode__title">Used {{ isDrag ? 'Drag and Drop' : 'Click' }} Mode</p>
+    <SwitchUI v-model="isDrag"/>
+  </div>
+  
+  <BoardComponent :isDrag />
+</div>
 </template>
 
 <style scoped>
+
+.wrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .powered{
   font-size: 2rem;
+  line-height: 1;
   text-align: center;
 }
 

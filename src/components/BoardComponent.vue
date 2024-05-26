@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { useDragEvents } from '../composables/useDragEvents';
+import { useDragEvents, useClickEvent } from '../composables/useSwapEvents';
+
+const props = defineProps<{
+  isDrag:boolean
+}>()
+
 
 type ImgOrder = {
   id:string,
   src:string,
 
 }
-
+const clickHandler = useClickEvent()
 const dragEvents = useDragEvents();
 
 const properties = ref({
@@ -24,11 +29,12 @@ const boardStyle = ref({
 const turns = ref<number>(0);
 
 const pictureName = ref<string>('defo');
-const imagesContainer = ref<HTMLDivElement>()
+
+
 
 const imgOrder = ref<ImgOrder[]>([]);
 
-const fillImgOrder = () => {
+const fillImgOrder = async() => {
     let order = 0;
     imgOrder.value = []
     for (let i = 0; i < properties.value.rows; i++) {
@@ -40,7 +46,11 @@ const fillImgOrder = () => {
         })
       }
     } 
+
+
 }
+
+console.log(clickHandler.checkAdjacentElements('0-1'))
 
 
 const shuffleImg = () => {
@@ -54,35 +64,35 @@ const newGame = () => {
   fillImgOrder()
   shuffleImg()
   turns.value = 0
+  
 }
-
-onMounted(()=>{
+onMounted(async()=>{
   fillImgOrder()
-
 })
 
 </script>
 
 <template>
-
   <div class="board">
-    <div class="board__inner" id="board-container" :style="boardStyle" ref="imagesContainer">
+    <div class="board__inner" id="board-container" :style="boardStyle">
       <img
         v-for="img,idx in imgOrder"
         :key="idx"
         :src="img.src"
         :alt="img.id"
         :id="img.id"
-        draggable="true"
+        :draggable="props.isDrag"
         @dragstart="dragEvents.dragStart"
         @dragover="dragEvents.dragOver"
         @dragenter="dragEvents.dragEnter"
         @drop="dragEvents.dragDrop"
         @dragend="turns += dragEvents.dragEnd()"
         @touchstart="dragEvents.touchStart"
-        @touchend="turns += dragEvents.touchEnd($event)"
+        @touchend="turns += dragEvents.touchEnd($event); console.log('touched')"
         @touchmove="dragEvents.touchMove"
-      >
+        @click=" turns += clickHandler.checkAdjacentElements(img.id)"
+
+      />
     </div>
   </div>
 
