@@ -3,12 +3,10 @@ import { ref, onMounted } from 'vue';
 import { useDragEvents } from '../composables/useDragEvents';
 
 type ImgOrder = {
-  order:number,
   id:string,
   src:string,
 
 }
-
 
 const dragEvents = useDragEvents();
 
@@ -30,7 +28,6 @@ const imagesContainer = ref<HTMLDivElement>()
 
 const imgOrder = ref<ImgOrder[]>([]);
 
-
 const fillImgOrder = () => {
     let order = 0;
     imgOrder.value = []
@@ -38,35 +35,26 @@ const fillImgOrder = () => {
       for (let j = 0; j < properties.value.cols; j++) {
         order++
         imgOrder.value.push({
-          order,
           id:i.toString() + '-' + j.toString(),
           src:new URL(`../assets/${pictureName.value}/${order}.png`, import.meta.url).href,
         })
       }
-      
-    }
-
-   
+    } 
 }
 
 
 const shuffleImg = () => {
- 
   for (let i = imgOrder.value.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [imgOrder.value[i].src, imgOrder.value[j].src] = [imgOrder.value[j].src, imgOrder.value[i].src];
    
   }
 };
-
-
-
 const newGame = () => {
   fillImgOrder()
   shuffleImg()
   turns.value = 0
 }
-
 
 onMounted(()=>{
   fillImgOrder()
@@ -76,7 +64,7 @@ onMounted(()=>{
 </script>
 
 <template>
-  <h1 class="title">Puzzle Game</h1>
+
   <div class="board">
     <div class="board__inner" id="board-container" :style="boardStyle" ref="imagesContainer">
       <img
@@ -90,12 +78,10 @@ onMounted(()=>{
         @dragover="dragEvents.dragOver"
         @dragenter="dragEvents.dragEnter"
         @drop="dragEvents.dragDrop"
-        @dragend="turns += dragEvents.dragEnd($event)"
+        @dragend="turns += dragEvents.dragEnd()"
         @touchstart="dragEvents.touchStart"
         @touchend="turns += dragEvents.touchEnd($event)"
         @touchmove="dragEvents.touchMove"
-        
-      
       >
     </div>
   </div>

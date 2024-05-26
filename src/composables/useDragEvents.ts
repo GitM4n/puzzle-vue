@@ -23,19 +23,14 @@ export const useDragEvents = () => {
        
     };
     
-    const dragEnd = (event:DragEvent):number => {
-        event.preventDefault()
+    const dragEnd = ():number => {
+       
         if (!currTile.value || !targetTile.value) return 0;
 
         const emptysrc= currTile.value?.src
         const pattern = /\/9.*\.png$/
     
         if(pattern.test(emptysrc)) return 0
-
-
-      
-
-
 
         const r1 = parseInt(currTile.value.id.split('-')[0]);
         const c1 = parseInt(currTile.value.id.split('-')[1]);
@@ -49,8 +44,6 @@ export const useDragEvents = () => {
         const moveDown = c1 == c2 && r2 == r1+1
         const isEmpty = pattern.test(targetTile.value.src)
 
-
-
         const isMoveValid = (moveLeft || moveRight || moveUp || moveDown)&&isEmpty
 
         if(!isMoveValid) return 0
@@ -63,6 +56,7 @@ export const useDragEvents = () => {
         return 1
     };
 
+
     const touchStart = (event: TouchEvent) => {
         currTile.value = event.target as HTMLImageElement;
       };
@@ -73,7 +67,7 @@ export const useDragEvents = () => {
       
       const touchEnd = (event: TouchEvent):number => {
         targetTile.value = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY) as HTMLImageElement;
-        return dragEnd(event as unknown as DragEvent);
+        return dragEnd();
       };
 
 

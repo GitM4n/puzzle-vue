@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import BoardComponent from './components/BoardComponent.vue'
 </script>
 
 <template>
+  <p class="powered">Powered by</p>
   <div>
     <a href="https://vitejs.dev" target="_blank">
       <img src="/vite.svg" class="logo" alt="Vite logo" />
@@ -11,13 +12,20 @@ import HelloWorld from './components/HelloWorld.vue'
       <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
   </div>
-  <HelloWorld/>
+  <h1 class="title">Puzzle Game</h1>
+  <BoardComponent />
 </template>
 
 <style scoped>
+.powered{
+  font-size: 2rem;
+  text-align: center;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
+  padding-top: 0;
   will-change: filter;
   transition: filter 300ms;
 }
