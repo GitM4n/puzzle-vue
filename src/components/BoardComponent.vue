@@ -2,8 +2,11 @@
 import { ref, onMounted } from 'vue';
 import { useDragEvents, useClickEvent } from '../composables/useSwapEvents';
 
+
+
 const props = defineProps<{
-  isDrag:boolean
+  isDrag:boolean,
+  folderName:string,
 }>()
 
 
@@ -28,7 +31,7 @@ const boardStyle = ref({
 
 const turns = ref<number>(0);
 
-const pictureName = ref<string>('defo');
+
 
 
 
@@ -42,7 +45,7 @@ const fillImgOrder = async() => {
         order++
         imgOrder.value.push({
           id:i.toString() + '-' + j.toString(),
-          src:new URL(`../assets/${pictureName.value}/${order}.png`, import.meta.url).href,
+          src:new URL(`../assets/images/${props.folderName}/${order}.png`, import.meta.url).href,
         })
       }
     } 
@@ -67,41 +70,51 @@ const newGame = () => {
   
 }
 onMounted(async()=>{
-  fillImgOrder()
+  newGame()
+
 })
 
 </script>
 
 <template>
-  <div class="board">
-    <div class="board__inner" id="board-container" :style="boardStyle">
-      <img
-        v-for="img,idx in imgOrder"
-        :key="idx"
-        :src="img.src"
-        :alt="img.id"
-        :id="img.id"
-        :draggable="props.isDrag"
-        @dragstart="dragEvents.dragStart"
-        @dragover="dragEvents.dragOver"
-        @dragenter="dragEvents.dragEnter"
-        @drop="dragEvents.dragDrop"
-        @dragend="turns += dragEvents.dragEnd()"
-        @touchstart="dragEvents.touchStart"
-        @touchend="turns += dragEvents.touchEnd($event); console.log('touched')"
-        @touchmove="dragEvents.touchMove"
-        @click=" turns += clickHandler.checkAdjacentElements(img.id)"
+  <div class="board-component">
+    <div class="board">
+      <div class="board__inner" id="board-container" :style="boardStyle">
+        <img
+          v-for="img,idx in imgOrder"
+          :key="idx"
+          :src="img.src"
+          :alt="img.id"
+          :id="img.id"
+          :draggable="props.isDrag"
+          @dragstart="dragEvents.dragStart"
+          @dragover="dragEvents.dragOver"
+          @dragenter="dragEvents.dragEnter"
+          @drop="dragEvents.dragDrop"
+          @dragend="turns += dragEvents.dragEnd()"
+          @touchstart="dragEvents.touchStart"
+          @touchend="turns += dragEvents.touchEnd($event); console.log('touched')"
+          @touchmove="dragEvents.touchMove"
+          @click="!props.isDrag ? turns += clickHandler.checkAdjacentElements(img.id) : undefined"
 
-      />
+        />
+      </div>
     </div>
-  </div>
 
-  <h2 class="turns">Turns:{{turns}}</h2>
-  <button class="new-game" @click="newGame">New Game</button>
+    <h2 class="turns">Turns:{{turns}}</h2>
+    <button class="new-game" @click="newGame">New Game</button>
+  </div>
  
 </template>
 
 <style scoped>
+.board-component{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 30px;
+}
+
 .board {
   margin: 0 auto;
   border: 10px solid rgb(95, 255, 47);
@@ -113,8 +126,10 @@ onMounted(async()=>{
 }
 
 img{
-  width: 200px;
-  height: 200px;
+  width: 100%;
+  height: 100%;
 }
+
+
 
 </style>

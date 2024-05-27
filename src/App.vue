@@ -2,16 +2,34 @@
 import {ref, watch} from 'vue'
 import BoardComponent from './components/BoardComponent.vue'
 import SwitchUI from './components/SwitchUI.vue';
+import SelectImagesModal from './components/SelectImagesModal.vue';
+import SelectImage from './components/SelectImage.vue';
+
 
 const isDrag = ref<boolean>(true)
+const folderName = ref<string>('defo');
+const isModal = ref<boolean>(false)
+const rerender = ref<number>(0)
 
-watch(isDrag, ()=>{
-  console.log(isDrag.value)
+
+
+const setImg = (name:string) => {
+    folderName.value = name
+    isModal.value = false
+
+}
+
+watch(folderName, ()=>{
+    rerender.value++
 })
+
+
+
 
 </script>
 
 <template>
+  <SelectImagesModal v-if="isModal" @setImg="setImg"/>
 <div class="wrapper">
   <p class="powered">Powered by</p>
   <div>
@@ -29,7 +47,10 @@ watch(isDrag, ()=>{
     <SwitchUI v-model="isDrag"/>
   </div>
   
-  <BoardComponent :isDrag />
+  <div class="content">
+    <BoardComponent class="board-component" :isDrag  :folderName :key="rerender"/>
+    <SelectImage :folderName @openModal="isModal=true"/>
+  </div>
 </div>
 </template>
 
@@ -38,7 +59,7 @@ watch(isDrag, ()=>{
 .wrapper{
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
 }
 
 .powered{
@@ -59,5 +80,15 @@ watch(isDrag, ()=>{
 }
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
+}
+
+.content{
+  display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: center;
+  gap: 40px;
+}
+.board-component{
+  flex: 0 0 60%;
 }
 </style>
